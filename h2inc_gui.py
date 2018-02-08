@@ -72,9 +72,7 @@ class h2incGUI:
         self.translate_button.config(state=DISABLED)
 
     def select_sourcedir(self, sourcedir, infofile):
-        global cnt
-        cnt = 0
-        root.directory = filedialog.askdirectory()
+        root.directory = os.path.abspath(filedialog.askdirectory())
         if root.directory:
             sourcedir.set(root.directory)
             filecnt = sourcedir_filecnt(root.directory)
@@ -96,6 +94,9 @@ class h2incGUI:
             destdir.set(root.directory)
             print ('Destination directory: ', destdir.get())
             self.incchkbox.config(state=NORMAL)
+            self.infofolders.config(state=NORMAL)
+            self.infofiles.config(state=NORMAL)
+            self.translate_button.config(state=NORMAL)
 
         
 
