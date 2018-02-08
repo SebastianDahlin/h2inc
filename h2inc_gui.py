@@ -9,17 +9,18 @@ from h2inc import sourcedir_filecnt, sourcedir_foldercnt, cnt
 
 class h2incGUI:
     def __init__(self, master):
-        sourcedir = StringVar()
-        destdir = StringVar()
+        self.sourcedir = StringVar()
+        self.destdir = StringVar()
+        self.addinc = StringVar()
         self.infofolder = 'Number of folders: 0'
         self.infofile = 'Number of headers: 0'
 
-        sourcedir.set('Select source directory!')
-        destdir.set('Select destination directory!')
+        self.sourcedir.set('Select source directory!')
+        self.destdir.set('Select destination directory!')
 
         self.master = master
-        master.title('Translate C-header files to Nasm include files!')
-        master.grid_columnconfigure(1, weight=1)
+        self.master.title('Translate C-header files to Nasm include files!')
+        self.master.grid_columnconfigure(1, weight=1)
 
         self.frame = LabelFrame(master, text='Select folders')
         self.frame.grid(row=0, column=0, columnspan=3, sticky=N+S+E+W, padx=5, pady=5)
@@ -28,27 +29,28 @@ class h2incGUI:
         self.sourcelabel = Label(self.frame, text='Source: ')
         self.sourcelabel.grid(row=0, column=0, sticky=E, padx=(5, 1), pady=5)
 
-        self.sourceentry = Entry(self.frame, textvariable=sourcedir)
+        self.sourceentry = Entry(self.frame, textvariable=self.sourcedir)
         self.sourceentry.grid(row=0, column=1, sticky=E+W, pady=5)
 
-        self.sourcedir_button = Button(self.frame, text="Source directory...", command= lambda: self.select_sourcedir(sourcedir, self.infofiles))
+        self.sourcedir_button = Button(self.frame, text="Source directory...", command= lambda: self.select_sourcedir(self.sourcedir, self.infofiles))
         self.sourcedir_button.grid(row=0, column=2, sticky=W, padx=(3, 5), pady=5)
 
         self.destlabel = Label(self.frame, text='Destination: ')
         self.destlabel.grid(row=1, column=0, sticky=E, padx=(5, 1), pady=5)
         self.destlabel.config(state=DISABLED)
 
-        self.destentry = Entry(self.frame, textvariable=destdir)
+        self.destentry = Entry(self.frame, textvariable=self.destdir)
         self.destentry.grid(row=1, column=1, sticky=E+W, pady=5)
         self.destentry.config(state=DISABLED)
 
-        self.destdir_button = Button(self.frame, text="Destination directory...", command= lambda: self.select_destdir(destdir))
+        self.destdir_button = Button(self.frame, text="Destination directory...", command= lambda: self.select_destdir(self.destdir))
         self.destdir_button.grid(row=1, column=2, sticky=W, padx=(3, 5), pady=5)
         self.destdir_button.config(state=DISABLED)
 
-        self.incchkbox = Checkbutton(self.frame, text='Create "include" folder.')
+        self.incchkbox = Checkbutton(self.frame, text='Create "include" folder if it does not exist.', variable=self.addinc, onvalue='yes', offvalue='no')
         self.incchkbox.grid(row=2, column=0, columnspan=2, sticky=W, padx=5, pady=5)
         self.incchkbox.config(state=DISABLED)
+        self.addinc.set('yes')
 
         self.transframe = LabelFrame(master, text='Translation')
         self.transframe.grid(row=1, rowspan=2, column=0, columnspan=3, sticky=N+S+E+W, padx=5, pady=5)
@@ -67,7 +69,7 @@ class h2incGUI:
         self.infofiles.grid(row=1, column=0, sticky=W, padx=5, pady=5)
         self.infofiles.config(state=DISABLED)
 
-        self.translate_button = Button(self.transframe, text="Translate!", command= lambda: self.select_destdir(destdir))
+        self.translate_button = Button(self.transframe, text="Translate!", command= lambda: self.select_destdir(self.destdir))
         self.translate_button.grid(row=3, column=0, sticky=W, padx=5, pady=5)
         self.translate_button.config(state=DISABLED)
 
